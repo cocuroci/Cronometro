@@ -5,8 +5,6 @@
 	<title></title>
 </head>
 <body>
-	
-
 	<script>
 		(function(window){
 
@@ -25,13 +23,14 @@
 
 			Cronometro.cronometro = function(options) {
 
-				var dataInicial   = options.dataInicial,				
-					dataFinal 	  = options.dataFinal,
-					onTick		  = options.onTick,
-					dias          = options.dias ? options.dias : false,
-					centesimos    = options.centesimos ? options.centesimos : false,
-					intervalo 	  = 0,
-					that		  = this;			
+				var dataInicial	= options.dataInicial,				
+					dataFinal	= options.dataFinal,
+					onTick		= options.onTick,
+					onComplete	= options.onComplete,
+					dias 		= options.dias ? options.dias : false,
+					centesimos 	= options.centesimos ? options.centesimos : false,
+					intervalo 	= 0,
+					that		= this;			
 
 
 				 var init = function() {					
@@ -46,8 +45,8 @@
 						tick = Cronometro.tipos.DIAS_CENTESIMOS;
 					} else if (!dias && centesimos) {
 						tick = Cronometro.tipos.NORMAL_CENTESIMOS;
-					}		
-					
+					}
+
 					intervalo = setInterval(function() {
 						eval(tick)();
 					},Cronometro.velocidade[centesimos ? 1 : 0]);
@@ -71,13 +70,15 @@
 							seg : seg
 						});
 					} else {
+						onComplete.apply(that);
 						clearInterval(intervalo);
 					}	
 				}
 
 				init();
 			};
-		
+			
+			/*
 			Cronometro.cronometro.prototype.NORMAL_CENTESIMOS = function() {
 				var hor, min, seg, cet, diferenca;
 
@@ -145,46 +146,27 @@
 					clearInterval(this.intervalo);
 				}	
 			};
+			*/
 
 			window.Cronometro = Cronometro.cronometro;
 
 		})(window);		
-	</script>
-
-
-	
+	</script>	
 
 	<p><span id="dia">00</span> dias <span id="hor">00</span> : <span id="min">00</span> : <span id="seg">00</span> : <span id="dec">00</span></p>
 	<p><span id="hor2">00</span> : <span id="min2">00</span> : <span id="seg2">00</span></p>
 
-
-	<script>		
-		/*
-		var d = new Cronometro({
-			dataInicial : new Date(),
-			dataFinal 	: new Date('2012/06/28 16:38:00'),
-			dias 		: true,
-			centesimos  : false,
-			onTick		: function(data) {				
-				document.getElementById('dia').innerHTML = data.dia >= 10 ? data.dia : '0'+data.dia;
-				document.getElementById('hor').innerHTML = data.hor >= 10 ? data.hor : '0'+data.hor;
-				document.getElementById('min').innerHTML = data.min >= 10 ? data.min : '0'+data.min;
-				document.getElementById('seg').innerHTML = data.seg >= 10 ? data.seg : '0'+data.seg;
-				document.getElementById('dec').innerHTML = data.dec >= 10 ? data.dec : '0'+data.dec;
-			}
-		});			
-		*/
-	</script>
-
-
 	<script>		
 		var c = new Cronometro({
 			dataInicial : new Date(),
-			dataFinal 	: new Date('2012/06/26 17:38:00'),			
+			dataFinal 	: new Date('2012/06/26 17:12:00'),			
 			onTick		: function(data) {				
 				document.getElementById('hor2').innerHTML = data.hor >= 10 ? data.hor : '0'+data.hor;
 				document.getElementById('min2').innerHTML = data.min >= 10 ? data.min : '0'+data.min;
 				document.getElementById('seg2').innerHTML = data.seg >= 10 ? data.seg : '0'+data.seg;				
+			},
+			onComplete : function() {
+				console.log(this)
 			}
 		});				
 	</script>
