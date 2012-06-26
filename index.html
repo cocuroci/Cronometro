@@ -1,0 +1,192 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<body>
+	
+
+	<script>
+		(function(window){
+
+			var Cronometro = Cronometro || {
+				tipos : {
+					NORMAL 				: 'NORMAL',
+					DIAS				: 'DIAS',
+					NORMAL_CENTESIMOS 	: 'NORMAL_CENTESIMOS',
+					DIAS_CENTESIMOS	  	: 'DIAS_CENTESIMOS',
+				},
+				velocidade : {
+					0 : 999,
+					1 : 25
+				}
+			};
+
+			Cronometro.cronometro = function(options) {
+
+				var dataInicial   = options.dataInicial,				
+					dataFinal 	  = options.dataFinal,
+					onTick		  = options.onTick,
+					dias          = options.dias ? options.dias : false,
+					centesimos    = options.centesimos ? options.centesimos : false,
+					intervalo 	  = 0,
+					that		  = this;			
+
+
+				 var init = function() {					
+					
+					var tick;
+
+					if (dias && !centesimos) {
+						tick = Cronometro.tipos.DIAS;
+					} else if (!dias && !centesimos) {
+						tick = Cronometro.tipos.NORMAL;
+					} else if (dias && centesimos) {
+						tick = Cronometro.tipos.DIAS_CENTESIMOS;
+					} else if (!dias && centesimos) {
+						tick = Cronometro.tipos.NORMAL_CENTESIMOS;
+					}		
+					
+					intervalo = setInterval(function() {
+						eval(tick)();
+					},Cronometro.velocidade[centesimos ? 1 : 0]);
+
+					eval(tick)();
+				}
+
+				var NORMAL = function() {
+					var hor, min, seg, diferenca;
+
+					diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.velocidade[0]);				
+
+					if(diferenca > 0) {
+						seg = Math.floor(diferenca/1000)%60;				
+						min = Math.floor((diferenca/1000)/60)%60;			
+						hor = Math.floor(((diferenca/1000)/60)/60);
+
+						onTick({						
+							hor : hor,
+							min : min,
+							seg : seg
+						});
+					} else {
+						clearInterval(intervalo);
+					}	
+				}
+
+				init();
+			};
+		
+			Cronometro.cronometro.prototype.NORMAL_CENTESIMOS = function() {
+				var hor, min, seg, cet, diferenca;
+
+				diferenca = this.dataFinal - this.dataInicial.setTime(this.dataInicial.getTime() + Cronometro.velocidade[1]);				
+
+				if(diferenca > 0) {
+					dec = Math.floor(diferenca/10)%100;
+					seg = Math.floor(diferenca/1000)%60;				
+					min = Math.floor((diferenca/1000)/60)%60;			
+					hor = Math.floor(((diferenca/1000)/60)/60);
+
+					this.callback({						
+						hor : hor,
+						min : min,
+						seg : seg,
+						dec : dec
+					});
+				} else {
+					clearInterval(this.intervalo);
+				}	
+			};
+
+			Cronometro.cronometro.prototype.DIAS = function() {
+				var dia, hor, min, seg, diferenca;
+
+				diferenca = this.dataFinal - this.dataInicial.setTime(this.dataInicial.getTime() + Cronometro.velocidade[0]);				
+
+				if(diferenca > 0) {						
+					seg = Math.floor(diferenca/1000)%60;
+					min = Math.floor((diferenca/1000)/60)%60;
+					hor = Math.floor(((diferenca/1000)/60)/60)%24;		
+					dia = Math.floor((((diferenca/1000)/60)/60)/24);
+
+					this.callback({
+						dia : dia,
+						hor : hor,
+						min : min,
+						seg : seg
+					});
+				} else {
+					clearInterval(this.intervalo);
+				}	
+			};
+
+			Cronometro.cronometro.prototype.DIAS_CENTESIMOS = function() {
+				var dia, hor, min, seg, diferenca;
+
+				diferenca = this.dataFinal - this.dataInicial.setTime(this.dataInicial.getTime() + Cronometro.velocidade[1]);				
+
+				if(diferenca > 0) {	
+					dec = Math.floor(diferenca/10)%100;					
+					seg = Math.floor(diferenca/1000)%60;
+					min = Math.floor((diferenca/1000)/60)%60;
+					hor = Math.floor(((diferenca/1000)/60)/60)%24;		
+					dia = Math.floor((((diferenca/1000)/60)/60)/24);
+
+					this.callback({
+						dia : dia,
+						hor : hor,
+						min : min,
+						seg : seg,
+						dec : dec
+					});
+				} else {
+					clearInterval(this.intervalo);
+				}	
+			};
+
+			window.Cronometro = Cronometro.cronometro;
+
+		})(window);		
+	</script>
+
+
+	
+
+	<p><span id="dia">00</span> dias <span id="hor">00</span> : <span id="min">00</span> : <span id="seg">00</span> : <span id="dec">00</span></p>
+	<p><span id="hor2">00</span> : <span id="min2">00</span> : <span id="seg2">00</span></p>
+
+
+	<script>		
+		/*
+		var d = new Cronometro({
+			dataInicial : new Date(),
+			dataFinal 	: new Date('2012/06/28 16:38:00'),
+			dias 		: true,
+			centesimos  : false,
+			onTick		: function(data) {				
+				document.getElementById('dia').innerHTML = data.dia >= 10 ? data.dia : '0'+data.dia;
+				document.getElementById('hor').innerHTML = data.hor >= 10 ? data.hor : '0'+data.hor;
+				document.getElementById('min').innerHTML = data.min >= 10 ? data.min : '0'+data.min;
+				document.getElementById('seg').innerHTML = data.seg >= 10 ? data.seg : '0'+data.seg;
+				document.getElementById('dec').innerHTML = data.dec >= 10 ? data.dec : '0'+data.dec;
+			}
+		});			
+		*/
+	</script>
+
+
+	<script>		
+		var c = new Cronometro({
+			dataInicial : new Date(),
+			dataFinal 	: new Date('2012/06/26 17:38:00'),			
+			onTick		: function(data) {				
+				document.getElementById('hor2').innerHTML = data.hor >= 10 ? data.hor : '0'+data.hor;
+				document.getElementById('min2').innerHTML = data.min >= 10 ? data.min : '0'+data.min;
+				document.getElementById('seg2').innerHTML = data.seg >= 10 ? data.seg : '0'+data.seg;				
+			}
+		});				
+	</script>
+</body>
+</html>
