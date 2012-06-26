@@ -10,10 +10,10 @@
 
 			var Cronometro = Cronometro || {
 				tipos : {
-					NORMAL 				: 'NORMAL',
-					DIAS				: 'DIAS',
-					NORMAL_CENTESIMOS 	: 'NORMAL_CENTESIMOS',
-					DIAS_CENTESIMOS	  	: 'DIAS_CENTESIMOS',
+					NORMAL            : 'NORMAL',
+					DIAS              : 'DIAS',
+					NORMAL_CENTESIMOS : 'NORMAL_CENTESIMOS',
+					DIAS_CENTESIMOS   : 'DIAS_CENTESIMOS',
 				},
 				velocidade : {
 					0 : 999,
@@ -64,11 +64,12 @@
 						min = Math.floor((diferenca/1000)/60)%60;			
 						hor = Math.floor(((diferenca/1000)/60)/60);
 
-						onTick({						
-							hor : hor,
-							min : min,
-							seg : seg
-						});
+                        onTick.apply(that,[{                        
+                            hor : hor,
+                            min : min,
+                            seg : seg
+                        }]);
+						
 					} else {
 						onComplete.apply(that);
 						clearInterval(intervalo);
@@ -159,8 +160,8 @@
 	<script>		
 		var c = new Cronometro({
 			dataInicial : new Date(),
-			dataFinal 	: new Date('2012/06/26 17:12:00'),			
-			onTick		: function(data) {				
+			dataFinal 	: new Date('2012/06/26 17:20:00'),			
+			onTick		: function(data) {
 				document.getElementById('hor2').innerHTML = data.hor >= 10 ? data.hor : '0'+data.hor;
 				document.getElementById('min2').innerHTML = data.min >= 10 ? data.min : '0'+data.min;
 				document.getElementById('seg2').innerHTML = data.seg >= 10 ? data.seg : '0'+data.seg;				
