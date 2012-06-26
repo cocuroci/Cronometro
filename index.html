@@ -1,83 +1,83 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
-	<meta charset="UTF-8">
-	<title></title>
+    <meta charset="UTF-8">
+    <title></title>
 </head>
 <body>
-	<script>
-		(function(window){
+    <script>
+        (function(window){
 
-			var Cronometro = Cronometro || {
-				tipos : {
-					NORMAL            : 'NORMAL',
-					DIAS              : 'DIAS',
-					NORMAL_CENTESIMOS : 'NORMAL_CENTESIMOS',
-					DIAS_CENTESIMOS   : 'DIAS_CENTESIMOS',
-				},
-				velocidade : {
-					0 : 999,
-					1 : 25
-				}
-			};
+        var Cronometro = Cronometro || {
+            tipos : {
+                NORMAL            : 'NORMAL',
+                DIAS              : 'DIAS',
+                NORMAL_CENTESIMOS : 'NORMAL_CENTESIMOS',
+                DIAS_CENTESIMOS   : 'DIAS_CENTESIMOS'
+            },
+            velocidade : {
+                0 : 999,
+                1 : 25
+            }
+        };
 
-			Cronometro.cronometro = function(options) {
+        Cronometro.cronometro = function(options) {
 
-				var dataInicial	= options.dataInicial,				
-					dataFinal	= options.dataFinal,
-					onTick		= options.onTick,
-					onComplete	= options.onComplete,
-					dias 		= options.dias ? options.dias : false,
-					centesimos 	= options.centesimos ? options.centesimos : false,
-					intervalo 	= 0,
-					that		= this;			
+            var dataInicial	= options.dataInicial,				
+                dataFinal	= options.dataFinal,
+                onTick		= options.onTick,
+                onComplete	= options.onComplete,
+                dias 		= options.dias ? options.dias : false,
+                centesimos 	= options.centesimos ? options.centesimos : false,
+                intervalo 	= 0,
+                that		= this;			
 
 
-				 var init = function() {					
-					
-					var tick;
+            var init = function() {					
 
-					if (dias && !centesimos) {
-						tick = Cronometro.tipos.DIAS;
-					} else if (!dias && !centesimos) {
-						tick = Cronometro.tipos.NORMAL;
-					} else if (dias && centesimos) {
-						tick = Cronometro.tipos.DIAS_CENTESIMOS;
-					} else if (!dias && centesimos) {
-						tick = Cronometro.tipos.NORMAL_CENTESIMOS;
-					}
+                var tick;
 
-					intervalo = setInterval(function() {
-						eval(tick)();
-					},Cronometro.velocidade[centesimos ? 1 : 0]);
+                if (dias && !centesimos) {
+                    tick = Cronometro.tipos.DIAS;
+                } else if (!dias && !centesimos) {
+                    tick = Cronometro.tipos.NORMAL;
+                } else if (dias && centesimos) {
+                    tick = Cronometro.tipos.DIAS_CENTESIMOS;
+                } else if (!dias && centesimos) {
+                    tick = Cronometro.tipos.NORMAL_CENTESIMOS;
+                }
 
-					eval(tick)();
-				}
+                intervalo = setInterval(function() {
+                    eval(tick)();
+                },Cronometro.velocidade[centesimos ? 1 : 0]);
 
-				var NORMAL = function() {
-					var hor, min, seg, diferenca;
+                eval(tick)();
+            }
 
-					diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.velocidade[0]);				
+            var NORMAL = function() {
+                var hor, min, seg, diferenca;
 
-					if(diferenca > 0) {
-						seg = Math.floor(diferenca/1000)%60;				
-						min = Math.floor((diferenca/1000)/60)%60;			
-						hor = Math.floor(((diferenca/1000)/60)/60);
+                diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.velocidade[0]);				
 
-                        onTick.apply(that,[{                        
-                            hor : hor,
-                            min : min,
-                            seg : seg
-                        }]);
-						
-					} else {
-						onComplete.apply(that);
-						clearInterval(intervalo);
-					}	
-				}
+                if(diferenca > 0) {
+                    seg = Math.floor(diferenca/1000)%60;				
+                    min = Math.floor((diferenca/1000)/60)%60;			
+                    hor = Math.floor(((diferenca/1000)/60)/60);
 
-				init();
-			};
+                    onTick.apply(that,[{                        
+                        hor : hor,
+                        min : min,
+                        seg : seg
+                    }]);
+
+                } else {
+                    onComplete.apply(that);
+                    clearInterval(intervalo);
+                }	
+            }
+
+            init();
+        };
 			
 			/*
 			Cronometro.cronometro.prototype.NORMAL_CENTESIMOS = function() {
@@ -149,10 +149,10 @@
 			};
 			*/
 
-			window.Cronometro = Cronometro.cronometro;
+            window.Cronometro = Cronometro.cronometro;
 
-		})(window);		
-	</script>	
+        })(window);		
+    </script>	
 
 	<p><span id="dia">00</span> dias <span id="hor">00</span> : <span id="min">00</span> : <span id="seg">00</span> : <span id="dec">00</span></p>
 	<p><span id="hor2">00</span> : <span id="min2">00</span> : <span id="seg2">00</span></p>
