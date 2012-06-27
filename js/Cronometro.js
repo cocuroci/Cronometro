@@ -6,14 +6,14 @@
 
     Cronometro.cronometro = function(options) {
 
-        var dataInicial	= options.dataInicial,				
-            dataFinal	= options.dataFinal,
-            onTick		= options.onTick,
-            onComplete	= options.onComplete,
-            dias 		= options.dias ? options.dias : false,
-            centesimos 	= options.centesimos ? options.centesimos : false,
-            intervalo 	= 0,
-            that		= this;
+        var dataInicial = options.dataInicial,				
+            dataFinal   = options.dataFinal,
+            onTick      = options.onTick,
+            onComplete  = options.onComplete,
+            dias        = options.dias ? options.dias : false,
+            centesimos  = options.centesimos ? options.centesimos : false,
+            intervalo   = 0,
+            that        = this;
 
         var init = function() {					
 
