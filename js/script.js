@@ -1,7 +1,7 @@
 window.addEventListener('load', function() {
         new Cronometro({
             dataInicial : new Date(),
-            dataFinal   : new Date('2012/07/1 21:40:48'),
+            dataFinal   : new Date('2012/06/28 21:40:48'),
             dias        : true,
             centesimos  : true,
             onTick      : function(data) {
