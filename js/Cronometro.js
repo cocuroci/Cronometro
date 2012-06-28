@@ -24,12 +24,13 @@
             dias        = options.dias ? options.dias : false,
             centesimos  = options.centesimos ? options.centesimos : false,
             intervalo   = 0,
-            self        = this;
-            
+            self        = this,
+            tick        = function() {},
+            velocidade  = 0;            
 
-        var init = function() {
+        var init = function() {          
 
-            var tick        = function() {}            
+            velocidade  = Cronometro.config.velocidade[centesimos ? 1 : 0];
 
             if (!dias && !centesimos) {
                 tick = Cronometro.config.tipos.NORMAL;
@@ -39,11 +40,7 @@
                 tick = Cronometro.config.tipos.DIAS;
             } else if (dias && centesimos) {
                 tick = Cronometro.config.tipos.DIAS_CENTESIMOS;
-            }
-
-            intervalo = setInterval(function() {
-                tick();
-            },Cronometro.config.velocidade[centesimos ? 1 : 0]);            
+            }           
 
             tick();     	
         }
@@ -64,6 +61,10 @@
                     min : min,
                     seg : seg
                 }]);
+
+                setTimeout(function(){
+                    tick();
+                }, velocidade)
 
             } else {
                 onComplete.apply(self);
@@ -89,6 +90,10 @@
                     seg : seg
                 }]);
 
+                setTimeout(function(){
+                    tick();
+                }, velocidade)
+
             } else {
                 onComplete.apply(self);
                 clearInterval(intervalo);
@@ -112,6 +117,10 @@
                     seg : seg,
                     dec : dec
                 }]);
+
+                setTimeout(function(){
+                    tick();
+                }, velocidade)
 
             } else {
                 onComplete.apply(self);
@@ -138,6 +147,10 @@
                     seg : seg,
                     dec : dec
                 }]);
+
+                setTimeout(function(){
+                    tick();
+                }, velocidade)
 
             } else {
                 onComplete.apply(self);
