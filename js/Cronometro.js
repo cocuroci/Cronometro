@@ -26,11 +26,14 @@
             intervalo   = 0,
             self        = this,
             tick        = function() {},
-            velocidade  = 0;            
+            velocidade  = 0,
+            now         = null,
+            before      = null;       
 
         var init = function() {          
 
             velocidade  = Cronometro.config.velocidade[centesimos ? 1 : 0];
+            before      = new Date(); 
 
             if (!dias && !centesimos) {
                 tick = Cronometro.config.tipos.NORMAL;
@@ -40,14 +43,14 @@
                 tick = Cronometro.config.tipos.DIAS;
             } else if (dias && centesimos) {
                 tick = Cronometro.config.tipos.DIAS_CENTESIMOS;
-            }           
+            }  
 
             tick();     	
         }
 
         var NORMAL = function() {
 
-            var hor, min, seg, diferenca;
+            var hor, min, seg, diferenca;            
 
             diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.config.velocidade[0]);				
 
@@ -64,7 +67,7 @@
 
                 setTimeout(function(){
                     tick();
-                }, velocidade)
+                }, velocidade);                
 
             } else {
                 onComplete.apply(self);
@@ -92,7 +95,7 @@
 
                 setTimeout(function(){
                     tick();
-                }, velocidade)
+                }, velocidade);
 
             } else {
                 onComplete.apply(self);
@@ -101,9 +104,18 @@
         };
 
         var NORMAL_CENTESIMOS = function() {
-            var hor, min, seg, cet, diferenca;
+            var hor, min, seg, cet, diferenca, 
+                now         = new Date(),
+                elapsedTime = now.getTime() - before.getTime(),
+                velTemp     = 0;
 
-            diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.config.velocidade[1]);               
+            if(elapsedTime > velocidade) {
+                velTemp = elapsedTime;                
+            } else {
+                velTemp = velocidade;                 
+            }    
+
+            diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + velTemp);                     
 
             if(diferenca > 0) {
                 dec = Math.floor(diferenca/self.tempo.centesimos)%100;
@@ -120,12 +132,14 @@
 
                 setTimeout(function(){
                     tick();
-                }, velocidade)
+                }, velocidade);                
 
             } else {
                 onComplete.apply(self);
                 clearInterval(intervalo);
-            }           
+            }
+
+            before = new Date();
         };
 
         var DIAS_CENTESIMOS = function() {
