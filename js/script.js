@@ -1,11 +1,12 @@
 window.addEventListener('load', function() {
         new Cronometro({
             dataInicial : new Date(),
-            dataFinal   : new Date('2012/06/28 21:40:48'),
-            dias        : false,
-            centesimos  : true,
+            dataFinal   : new Date('2012/07/2 16:08:00'),
+            dias        : true,
+            centesimos  : false,
             onTick      : function(data) {
-                //document.getElementById('dia').innerHTML = data.dia >= 10 ? data.dia : '0'+data.dia;
+                console.log(data)
+                document.getElementById('dia').innerHTML = data.dia >= 10 ? data.dia : '0'+data.dia;
                 document.getElementById('hor').innerHTML = data.hor >= 10 ? data.hor : '0'+data.hor;
                 document.getElementById('min').innerHTML = data.min >= 10 ? data.min : '0'+data.min;
                 document.getElementById('seg').innerHTML = data.seg >= 10 ? data.seg : '0'+data.seg;
