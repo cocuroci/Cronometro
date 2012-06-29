@@ -30,10 +30,7 @@
             now         = null,
             before      = null;       
 
-        var init = function() {          
-
-            velocidade  = Cronometro.config.velocidade[centesimos ? 1 : 0];
-            before      = new Date(); 
+        var init = function() {
 
             if (!dias && !centesimos) {
                 tick = Cronometro.config.tipos.NORMAL;
@@ -43,7 +40,10 @@
                 tick = Cronometro.config.tipos.DIAS;
             } else if (dias && centesimos) {
                 tick = Cronometro.config.tipos.DIAS_CENTESIMOS;
-            }  
+            }
+
+            velocidade  = Cronometro.config.velocidade[centesimos ? 1 : 0];
+            before      = new Date();
 
             tick();     	
         }
@@ -52,11 +52,11 @@
 
             var hor, min, seg, diferenca;            
 
-            diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.config.velocidade[0]);				
+            diferenca = dataFinal - dataInicial.setTime(dataInicial.getTime() + Cronometro.config.velocidade[0]);               
 
             if(diferenca > 0) {
-                seg = Math.floor(diferenca/self.tempo.segundos)%60;				
-                min = Math.floor(diferenca/self.tempo.minutos)%60;			
+                seg = Math.floor(diferenca/self.tempo.segundos)%60;             
+                min = Math.floor(diferenca/self.tempo.minutos)%60;          
                 hor = Math.floor(diferenca/self.tempo.horas);
 
                 onTick.apply(self,[{                        
@@ -72,8 +72,9 @@
             } else {
                 onComplete.apply(self);
                 clearInterval(intervalo);
-            }	
+            }   
         }
+
 
         var DIAS = function() {
             var dia, hor, min, seg, diferenca;
@@ -104,7 +105,7 @@
         };
 
         var NORMAL_CENTESIMOS = function() {
-            var hor, min, seg, cet, diferenca, 
+            var hor, min, seg, dec, diferenca, 
                 now         = new Date(),
                 elapsedTime = now.getTime() - before.getTime(),
                 velTemp     = 0;
