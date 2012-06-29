@@ -48,7 +48,7 @@
             tick();     	
         }
 
-        var NORMAL = function() {
+        var TICK = function() {
 
             var hor, min, seg, diferenca;            
 
