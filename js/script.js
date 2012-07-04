@@ -1,9 +1,9 @@
 window.addEventListener('load', function() {
         new Cronometro({
-            dataInicial : new Date(),
-            dataFinal   : new Date('2012/07/2 16:08:00'),
+            dataInicial : '2012/07/2 16:07:45',
+            dataFinal   : [new Date('2012/07/2 16:08:00'), '2012/07/2 16:09:00'],
             dias        : true,
-            centesimos  : false,
+            centesimos  : true,
             onTick      : function(data) {
                 console.log(data)
                 document.getElementById('dia').innerHTML = data.dia >= 10 ? data.dia : '0'+data.dia;
